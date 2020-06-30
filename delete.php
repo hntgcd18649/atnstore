@@ -22,7 +22,7 @@
             </ul>
         </div>
         <div class="loginbox">
-            <h1>Insert</h1>
+            <h1>Delete</h1>
         </div>
         <form action="/action_page.php">
             <label for="usrname">ClothesID</label>
@@ -31,12 +31,6 @@
             <label for="psw">ClothesName</label>
             <input type="password" id="psw" name="psw" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters" required>
 
-            <div id="Insert-zone" class="box-content">
-                <filedset>
-                    <lengend>Insert Data</lengend>
-                    <form id="Insert-file-form" action="?insert=file" method="POST" enctype="mutipart/form-data">
-                        <input multiple type="file" name="file_insert()" />
-                    </form>
             <ul>
                 <li><a href="home.html" title="Summit" target="_blank"><button class="btn" >Summit</button></a></li>
             </ul>
@@ -50,6 +44,42 @@
         <p id="number" class="invalid">A <b>number</b></p>
         <p id="length" class="invalid">Minimum <b>8 characters</b></p>
     </div>
+<?php
+ini_set('display_errors', 1);
+echo "Delete database!";
+?>
+
+<?php
+
+
+if (empty(getenv("DATABASE_URL"))){
+    echo '<p>The DB does not exist</p>';
+    $pdo = new PDO('pgsql:host=localhost;port=5432;dbname=mydb', 'postgres', '123456');
+}  else {
+     
+   $db = parse_url(getenv("DATABASE_URL"));
+   $pdo = new PDO("pgsql:" . sprintf(
+       "host=
+ec2-52-202-146-43.compute-1.amazonaws.com
+;port=5432;user=lnmlwwbswnzsfa;password=cb977e5e295f4561e6e00a6bfe3cb3f1239bd0a6f672d8cde0d2527d0f465bbd;dbname=d5jt6vji9s8ql3",
+        $db["host"],
+        $db["port"],
+        $db["user"],
+        $db["pass"],
+        ltrim($db["path"], "/")
+   ));
+}  
+
+$sql = "DELETE FROM product WHERE ProductID = '01'";
+$stmt = $pdo->prepare($sql);
+if($stmt->execute() == TRUE){
+    echo "Record deleted successfully.";
+} else {
+    echo "Error deleting record: ";
+}
+
+?>
 </body>
 
 </html>
+
